@@ -9,9 +9,11 @@ load_dotenv()
 db = SQLAlchemy()
 
 def init_db():
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.db')
+    print(f"Initializing database at {db_path}")
     with open('schema.sql', 'r') as f:
         schema = f.read()
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.executescript(schema)
     conn.commit()
@@ -22,8 +24,11 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.getenv("MY_SECRET_KEY")
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    print(f"SQLAlchemy is using the database at: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
     db.init_app(app)
 
