@@ -1,11 +1,11 @@
-from flask import Blueprint, request, flash
+from flask import Blueprint, render_template, flash
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/sign-up')
 def sign_up():
-    return '<h1>Sign up</h1>'
+    return render_template("sign_up.html")
 
 @auth.route('/login')
 def login():
-    return '<h1>Login</h1>'
+    return render_template("login.html")
